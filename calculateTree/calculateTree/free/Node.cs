@@ -9,6 +9,8 @@ namespace calculateTree.free
     class Node
     {
 
+        private Node parent;
+
         Varible self;
 
         List<Node> param;
@@ -21,12 +23,49 @@ namespace calculateTree.free
         }
 
 
-        public Node(Varible varilbe, List<Node> param, ICalculateMethod method)
+        public Node( Node parent, Varible varilbe, List<Node> param, ICalculateMethod method)
         {
+            this.parent = parent;
             this.self = varilbe;
             this.param = param;
             this.method = method;
         }
+
+        List<string> GetAllVarible()
+        {
+            List<string> res = new List<string>();
+            if (!self.IsContant)
+                res.Add(self.name);
+            if (param!=null && param.Count>0)
+            {
+                param.ForEach(p=> res.AddRange(p.GetAllVarible()) );
+            }
+            return res;
+        }
+
+
+        Node GetNodeFromParam(string varible)
+        {
+            return null;
+        }
+
+        private void ConditionAction(Func<Node ,bool> prediction, Action<Node> action)
+        {
+            if (prediction == null || action == null)
+                throw new ArgumentNullException();
+            if (prediction(this))
+            {
+                action(this);
+            }
+            if (param!=null && param.Count>0)
+            {
+                param.ForEach(p=>
+                { if (prediction(p))
+                        action(p);
+                });
+            }
+        }
+
         
         public dynamic InvokeMethod()
         {

@@ -16,19 +16,17 @@ namespace calculateTree.free
 
         private bool IsValueSet = false;
 
+        public bool IsContant { get; }
+
         private dynamic value;
 
-        public Varible(string name)
-        {
-            this.name = name;
-            this.IsKnown = false;
-        }
 
         public Varible(string name, Func<dynamic> getValue)
         {
             this.name = name;
             this.GetValueMethod = getValue;
             this.IsKnown = true;
+            this.IsContant = false;
         }
 
         public Varible(string name,dynamic val)
@@ -36,6 +34,7 @@ namespace calculateTree.free
             this.name = name;
             this.value = val;
             this.IsKnown = true;
+            this.IsContant = true;
         }
 
         internal void Execute( string calculateKey )

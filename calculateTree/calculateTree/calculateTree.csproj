@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Analyse.cs" />
     <Compile Include="free\CannotCalculate.cs" />
     <Compile Include="free\Engine.cs" />
     <Compile Include="free\ICalculateMethod.cs" />

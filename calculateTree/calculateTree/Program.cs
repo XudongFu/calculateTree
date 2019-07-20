@@ -10,6 +10,7 @@ namespace calculateTree
     {
         static void Main(string[] args)
         {
+            Analyse.main();
         }
     }
 }

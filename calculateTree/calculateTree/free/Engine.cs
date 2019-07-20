@@ -42,9 +42,14 @@ namespace calculateTree.free
         /// <param name="expression"></param>
         void Parse(string expression)
         {
+            Node node = Exp2Node(expression);
 
         }
 
+        private Node Exp2Node(string express)
+        {
+            return null;
+        }
 
         public string PrintDebugInfo()
         {
