@@ -12,5 +12,8 @@ namespace calculateTree.free
 
         dynamic GetValue(params dynamic[] param);
 
+        Node GetUnOpperationCalculateNode(int paramIndex);
+
+
     }
 }

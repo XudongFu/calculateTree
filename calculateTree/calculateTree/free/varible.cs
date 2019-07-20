@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace calculateTree.free
 {
-    class Varible
+    internal class Varible
     {
         public string name { get; }
 
         private Func<dynamic> GetValueMethod;
 
-        private List<Node> calculateTree;
+        private Dictionary<string, Node> calculateTree=new Dictionary<string, Node>();
 
-        private bool isContant = false;
+        private bool IsValueSet = false;
 
         private dynamic value;
 
@@ -38,10 +38,28 @@ namespace calculateTree.free
             this.IsKnown = true;
         }
 
-        public bool IsDirectGetAble {
+        internal void Execute( string calculateKey )
+        {
+            if (this.calculateTree.ContainsKey(calculateKey))
+            {
+                var result = calculateTree[calculateKey].InvokeMethod();
+                this.value = result;
+                this.IsValueSet = true;
+            }
+            throw new Exception(string.Format("",calculateKey));
+        }
+
+        internal void Clear()
+        {
+            value = null;
+            IsValueSet = false;
+        }
+
+
+        internal bool IsDirectGetAble {
 
             get {
-                return isContant || IsKnown;
+                return IsValueSet || IsKnown;
             }
         }
 
@@ -50,9 +68,9 @@ namespace calculateTree.free
         /// </summary>
         public bool IsKnown { get; }
 
-        dynamic GetValue()
+        public dynamic GetValue()
         {
-            if (isContant)
+            if (IsValueSet)
                 return value;
             if (IsKnown)
             {
@@ -65,7 +83,7 @@ namespace calculateTree.free
                     throw new Exception(String.Format("varible {0} is Known,but GetValueMethod equal null", name));
                 }
             }
-            throw new NotImplementedException("TODO 还没有写这里的逻辑");
+            throw new Exception(string.Format( "给出条件不足或者其他原因无法计算变量{0}的值",name));
         }
 
 
