@@ -16,9 +16,36 @@ namespace calculateTree.free
 
         private bool IsValueSet = false;
 
-        public bool IsContant { get; }
+        public bool IsContant { get; private set; }
+
+        /// <summary>
+        /// 表示变量是不是已知的
+        /// </summary>
+        public bool IsKnown { get; private set; }
 
         private dynamic value;
+        
+        public Varible(string name)
+        {
+            this.name = name;
+            IsContant = false;
+            IsValueSet = false;
+        }
+
+        public void SetGetValueMethod(Func<dynamic> GetValueMethod)
+        {
+            this.GetValueMethod = GetValueMethod;
+            this.IsKnown = true;
+            this.IsContant = false;
+        }
+
+        public void SetDefaultValue(dynamic value)
+        {
+            this.value = value;
+            this.IsKnown = true;
+            this.IsContant = true;
+        }
+
 
 
         public Varible(string name, Func<dynamic> getValue)
@@ -62,10 +89,12 @@ namespace calculateTree.free
             }
         }
 
-        /// <summary>
-        /// 表示变量是不是已知的
-        /// </summary>
-        public bool IsKnown { get; }
+
+        internal void AddCalculateTree(string key,Node node)
+        {
+            this.calculateTree[key] = node;
+        }
+
 
         public dynamic GetValue()
         {

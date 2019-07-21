@@ -43,7 +43,36 @@ namespace calculateTree.free
         void Parse(string expression)
         {
             Node node = Exp2Node(expression);
+            List<string> varibles = node.GetAllVarible();
+            if (varibles != null && varibles.Count > 0)
+            {
+                varibles.ForEach(p =>
+                {
+                    try
+                    {
+                        Varible vari;
+                        if (varibleDic.ContainsKey(p))
+                        {
+                            vari = varibleDic[p];
+                        }
+                        else
+                        {
+                            vari = new Varible(p);
+                            varibleDic.Add(p, vari);
+                        }
+                        Node temp = node.GetNodeFromParam(p);
+                        if (temp != null)
+                        {
+                            vari.AddCalculateTree(expression, temp);
+                        }
+                    }
+                    catch (CannnotGetNodeFromParam e)
+                    {
 
+
+                    }
+                });
+            }
         }
 
         private Node Exp2Node(string express)

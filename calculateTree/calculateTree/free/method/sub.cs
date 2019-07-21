@@ -8,11 +8,7 @@ namespace calculateTree.free.method
 {
     class Sub : ICalculateMethod
     {
-
-        public Sub(Node  node)
-        {
-
-        }
+        public Node currentNode { get; set; }
 
         public int GetParamCount()
         {

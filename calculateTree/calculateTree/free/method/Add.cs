@@ -8,12 +8,8 @@ namespace calculateTree.free.method
 {
     class Add : ICalculateMethod
     {
-        Node attachNode;
 
-        public Add(Node node)
-        {
-            this.attachNode = node;
-        }
+        public Node currentNode { get; set ; }
 
         public int GetParamCount()
         {
@@ -22,7 +18,15 @@ namespace calculateTree.free.method
 
         public Node GetUnOpperationCalculateNode(int paramIndex)
         {
-            throw new NotImplementedException();
+            if (paramIndex < 0 || paramIndex >= GetParamCount())
+                throw new ArgumentException();
+            Node subNode = currentNode.GetNode(paramIndex);
+            List<Node> param = new List<Node>();
+            param.Add(currentNode.GetTopNode());
+            param.Add(currentNode.GetNode(paramIndex == 0 ? 1 : 0));
+            Sub sub = new Sub();
+            Node res = new Node(null,subNode.self,param,sub);
+            return res;
         }
 
         public dynamic GetValue(params dynamic[] param)
