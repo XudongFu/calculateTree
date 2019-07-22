@@ -91,6 +91,21 @@ namespace calculateTree.free
         }
 
 
+        bool IsFunction(string express,int pos)
+        {
+            if (pos < express.Length)
+            {
+                if (express[pos]=='(')
+                {
+                    return true;
+                }
+                return false;
+            }
+            return false;
+        }
+
+
+
         string readNextTerm(string express,ref int pos)
         {
             if (pos < express.Length)
