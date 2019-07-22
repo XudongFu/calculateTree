@@ -11,6 +11,11 @@ namespace calculateTree.free.method
 
         public Node currentNode { get; set ; }
 
+        public string GetName()
+        {
+            return "+";
+        }
+
         public int GetParamCount()
         {
             return 2;

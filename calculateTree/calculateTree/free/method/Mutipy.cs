@@ -6,20 +6,20 @@ using System.Threading.Tasks;
 
 namespace calculateTree.free.method
 {
-    class Sub : ICalculateMethod
+    class Mutipy : ICalculateMethod
     {
-        public Node currentNode { get; set; }
-
-        public int GetParamCount()
-        {
-            return 2;
-        }
-
+        public Node currentNode { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public string GetName()
         {
-            return "-";
+            throw new NotImplementedException();
         }
+
+        public int GetParamCount()
+        {
+            throw new NotImplementedException();
+        }
+
         public Node GetUnOpperationCalculateNode(int paramIndex)
         {
             throw new NotImplementedException();
@@ -27,11 +27,7 @@ namespace calculateTree.free.method
 
         public dynamic GetValue(params dynamic[] param)
         {
-            if (param == null || param.Count() != 2)
-            {
-                throw new ArgumentException("加法需要两个参数");
-            }
-            return param[0] - param[1];
+            throw new NotImplementedException();
         }
     }
 }

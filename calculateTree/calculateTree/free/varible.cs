@@ -8,6 +8,8 @@ namespace calculateTree.free
 {
     internal class Varible
     {
+        private static int key = 1;
+
         public string name { get; }
 
         private Func<dynamic> GetValueMethod;
@@ -23,11 +25,34 @@ namespace calculateTree.free
         /// </summary>
         public bool IsKnown { get; private set; }
 
+        public bool IsTemp { get; private set; }
+
+
         private dynamic value;
+
+
+        string GetName()
+        {
+            string res = "temp_" + key;
+            unchecked
+            {
+                key += 1;
+            }
+            return res;
+        }
+
+        public Varible()
+        {
+            this.name = GetName();
+            IsTemp = true;
+            IsContant = false;
+            IsValueSet = false;
+        }
         
         public Varible(string name)
         {
             this.name = name;
+            IsTemp = false;
             IsContant = false;
             IsValueSet = false;
         }
@@ -50,6 +75,7 @@ namespace calculateTree.free
 
         public Varible(string name, Func<dynamic> getValue)
         {
+            IsTemp = false;
             this.name = name;
             this.GetValueMethod = getValue;
             this.IsKnown = true;

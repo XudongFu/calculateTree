@@ -16,7 +16,7 @@ namespace calculateTree.free
 
         Node GetUnOpperationCalculateNode(int paramIndex);
 
-
+        string GetName();
 
 
     }
