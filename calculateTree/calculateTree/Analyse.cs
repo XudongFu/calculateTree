@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace calculateTree
 {
+    /*
     class Analyse
     {
 
@@ -227,16 +228,10 @@ namespace calculateTree
         }
 
 
-        public static void main()
-        {
-            string exp = "(1+2)*(3+5*(8-6))";
-            int pos = 0;
-            Expression ee = new Analyse().GetExp(exp,ref pos);
-            ee.ToString();
-        }
-
 
 
 
     }
+*/
+
 }

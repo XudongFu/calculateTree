@@ -8,45 +8,86 @@ namespace calculateTree.free
 {
     class Analyse
     {
-        Stack<string> result = new Stack<string>();
+        List<string> result = new List<string>();
 
         Stack<string> operate = new Stack<string>();
 
-        HashSet<char> opp = new HashSet<char>{ '(','-','+','*','/' };
+        HashSet<char> opp = new HashSet<char>{ '-','+','*','/' };
 
-        //https://blog.csdn.net/zsuguangh/article/details/6280863
-        public void prase(string express)
+        Dictionary<string, int> level = new Dictionary<string, int>() { {"+",1 },{"-",1 } , { "*", 2 }, { "/", 2 } };
+
+        //https://blog.csdn.net/zsuguangh/article/details/6280863
+
+
+        private void Clear()
         {
+            result.Clear();
+            operate.Clear();
+        }
+
+
+        public static void main()
+        {
+            string exp = "(23+34*45/(5+6+7))";
+            List<string> ee = new Analyse().prase(exp);
+            ee.ForEach(p=>Console.Write(p+" "));
+        }
+
+        public List<string> prase(string express)
+        {
+            Clear();
             if (string.IsNullOrWhiteSpace(express))
                 throw new ArgumentException();
-            if (!express.Any(p => p == '='))
-            {
-                throw new ArgumentException("该表达式不是一个等式");
-            }
+            //if (!express.Any(p => p == '='))
+            //{
+            //    throw new ArgumentException("该表达式不是一个等式");
+            //}
             int pos = 0;
             express = express.Replace(" ","");
             string nextterm = readNextTerm(express,ref pos);
-            while (!string.IsNullOrWhiteSpace(express))
+            while (!string.IsNullOrWhiteSpace(nextterm))
             {
                 if (float.TryParse(nextterm, out float number))
                 {
                     // float number;
-                    result.Push(nextterm);
+                    result.Add(nextterm);
                 }
                 if (nextterm=="(")
                 {
                     operate.Push(nextterm);
 
                 }
-
-                if (opp.Any(p=>p.ToString().Equals(nextterm)))
+                if (nextterm == ")")
+                {
+                    bool see = false;
+                    while (operate.Count() != 0  && operate.Peek()!="(")
+                    {
+                        result.Add(operate.Pop());
+                    }
+                    if (operate.Count() != 0  && operate.Peek() == "(")
+                        operate.Pop();
+                    else
+                    if (operate.Count() == 0)
+                        throw new Exception("表达式有误");
+                }
+                if (opp.Any(p => p.ToString().Equals(nextterm)) || false)
                 {
 
+                    while (operate.Count != 0 && operate.Peek() != "(" && level[operate.Peek()]  >= level[nextterm] )
+                    {
+                        result.Add(operate.Pop());
+                    }
+                    operate.Push(nextterm);
+
                 }
-
                 nextterm = readNextTerm(express, ref pos);
-            }
 
+            }
+            while (operate.Count != 0)
+            {
+                result.Add(operate.Pop());
+            }
+            return result;
         }
 
 
@@ -56,8 +97,7 @@ namespace calculateTree.free
             {
                 if (opp.Contains(express[pos]))
                 {
-                    pos++;
-                    return express[pos].ToString();
+                    return express[pos++].ToString();
                 }
 
                 if (express[pos] >= '0' && express[pos] <= '9' || express[pos]=='.')
@@ -80,6 +120,10 @@ namespace calculateTree.free
                         res += express[pos].ToString();
                         pos++;
                     }
+                }
+                if (new string[] { "(",")"}.Contains(express[pos].ToString()))
+                {
+                    return express[pos++].ToString();
                 }
                 throw new Exception("TODO");
             }
