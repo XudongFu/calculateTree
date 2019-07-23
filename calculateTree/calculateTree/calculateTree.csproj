@@ -59,8 +59,11 @@
     <Compile Include="free\method\DivRem.cs" />
     <Compile Include="free\method\Exp.cs" />
     <Compile Include="free\method\Log.cs" />
+    <Compile Include="free\method\Max.cs" />
+    <Compile Include="free\method\Min.cs" />
     <Compile Include="free\method\Mutiply.cs" />
     <Compile Include="free\method\Pow.cs" />
+    <Compile Include="free\method\Round.cs" />
     <Compile Include="free\method\Sin.cs" />
     <Compile Include="free\method\Sqrt.cs" />
     <Compile Include="free\method\Sub.cs" />
