@@ -77,7 +77,7 @@ namespace calculateTree.free
 
         private Node Exp2Node(string express)
         {
-            return null;
+            return new Analyse().Prase(express);
         }
 
         public string PrintDebugInfo()

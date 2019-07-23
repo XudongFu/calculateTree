@@ -23,9 +23,6 @@ namespace calculateTree.free
 
         Dictionary<string, int> level = new Dictionary<string, int>() { {",",0 }, {"+",1 },{"-",1 } , { "*", 2 }, { "/", 2 } };
 
-        //https://blog.csdn.net/zsuguangh/article/details/6280863
-
-
         private void Clear()
         {
             result.Clear();
@@ -37,14 +34,18 @@ namespace calculateTree.free
 
         public static void main()
         {
-            string exp = "(23+34*45/(5+6+7))=9";
-            string exp2 = "1+2*sin(4+5)";
+            string exp = "(23+34*45/(5+6+7))";
+            string exp2 = "1+2*aa";
             string exp3 = "1+2*pow(4,(6+7.65*var)*2)=6";
             string exp4 = "0.56";
-            Node ee = new Analyse().Prase(exp);
+            Node ee = new Analyse().Prase(exp2);
+            if (ee.GetAllVarible().Count==0)
+            {
+                Console.WriteLine(ee.InvokeMethod());
+            }
             //ee.ForEach(p => Console.Write(p + " "));
         }
-        public Node toNode(List<string> terms)
+        private Node toNode(List<string> terms)
         {
             if (terms != null && terms.Count == 0)
             {
@@ -55,19 +56,22 @@ namespace calculateTree.free
             terms.Reverse();
             int index = 0;
             return ReadOneNode(terms, null, ref index); ;
-        }        Node ReadOneNode(List<string> terms, Node parentNode, ref int index)
+        }
+
+        private Node ReadOneNode(List<string> terms, Node parentNode, ref int index)
         {
             string curr = terms[index++];
             if (opper.Contains(curr))
             {
                 Varible vari = new Varible();
+                Node res = new Node(vari);
                 List<Node> param = new List<Node>();
                 ICalculateMethod method = CalculateFactory.GetMethod(curr);
                 for (int i=0;i<method.GetParamCount();i++)
                 {
-                    param.Add(ReadOneNode(terms,parentNode,ref index));
+                    param.Add(ReadOneNode(terms,res,ref index));
                 }
-                Node res = new Node(parentNode,vari, param, method);
+                res.SetParams(parentNode, param, method);
                 return res;
             }
             if (functionName.Contains(curr))
@@ -78,17 +82,18 @@ namespace calculateTree.free
                     paramCount += 1;
                 }
                 Varible vari = new Varible();
+                Node res = new Node(vari);
                 List<Node> param = new List<Node>();
                 ICalculateMethod method = CalculateFactory.GetMethod(curr);
                 if (method.GetParamCount() != paramCount)
                 {
-                    throw new Exception(string.Format("{0}的参数数量不正确，期待{1}的变量",curr,method.GetParamCount()));
+                    throw new Exception(string.Format("{0}的参数数量不正确，期待{1}个数目的变量",curr,method.GetParamCount()));
                 }
                 for (int i = 0; i < method.GetParamCount(); i++)
                 {
-                    param.Add(ReadOneNode(terms, parentNode, ref index));
+                    param.Add(ReadOneNode(terms, res, ref index));
                 }
-                Node res = new Node(parentNode, vari, param, method);
+                res.SetParams(parentNode, param, method);
                 return res;
 
             }
@@ -109,33 +114,48 @@ namespace calculateTree.free
             {
                 throw new Exception("unexpected condition");
             }
-        }        Node Prase(string express)
+        }
+
+
+        public Node Prase(string express)
         {
             if (string.IsNullOrWhiteSpace(express))
             {
                 throw new ArgumentNullException();
             }
             if (!express.Contains("="))
-                throw new ArgumentException("表达式必须是一个等式");
-            string[] exp = express.Split('=');
-            if (exp.Length!=2)
             {
-                throw new ArgumentException("表达式包含多个等号");
+                Node lefNode = GetNode(express);
+                return lefNode;
             }
-            Node lefNode = GetNode(exp[0]);
-            Node rightNode = GetNode(exp[1]);
-            List<Node> param = new List<Node>();
-            param.Add(lefNode);
-            param.Add(rightNode);
-            Varible vari = new Varible();
-            vari.SetDefaultValue(0);
-            ICalculateMethod method = CalculateFactory.GetMethod("-");
-            return new Node(null, vari, param, method);
-        }        Node GetNode(string express)
+            else
+            {
+                string[] exp = express.Split('=');
+                if (exp.Length != 2)
+                {
+                    throw new ArgumentException("表达式包含多个等号");
+                }
+                Node lefNode = GetNode(exp[0]);
+                Node rightNode = GetNode(exp[1]);
+                List<Node> param = new List<Node>();
+                param.Add(lefNode);
+                param.Add(rightNode);
+                Varible vari = new Varible();
+                vari.SetDefaultValue(0);
+                ICalculateMethod method = CalculateFactory.GetMethod("-");
+                Node res = new Node(vari);
+                lefNode.SetParent(res);
+                rightNode.SetParent(res);
+                res.SetParams(null,param,method);
+                return res;
+            }
+        }
+
+        private Node GetNode(string express)
         {
             return toNode(GetHalfExpress(express));
         }
-        public List<string> GetHalfExpress(string express)
+        private List<string> GetHalfExpress(string express)
         {
             Clear();
             if (string.IsNullOrWhiteSpace(express))
@@ -204,7 +224,7 @@ namespace calculateTree.free
         }
 
 
-        bool IsFunction(string express,int pos)
+        private bool IsFunction(string express,int pos)
         {
             if (pos < express.Length)
             {
@@ -217,9 +237,7 @@ namespace calculateTree.free
             return false;
         }
 
-
-
-        string readNextTerm(string express,ref int pos)
+        private string readNextTerm(string express,ref int pos)
         {
             if (pos < express.Length)
             {
@@ -243,7 +261,7 @@ namespace calculateTree.free
                 {
                     string res = express[pos].ToString();
                     pos++;
-                    while (express[pos] >= 'a' && express[pos] <= 'z' || express[pos] >= 'A' && express[pos] <= 'Z')
+                    while (pos < express.Length &&  (express[pos] >= 'a' && express[pos] <= 'z' || express[pos] >= 'A' && express[pos] <= 'Z'))
                     {
                         res += express[pos].ToString();
                         pos++;
@@ -261,8 +279,5 @@ namespace calculateTree.free
                 return "";
             }
         }
-
-
-
     }
 }

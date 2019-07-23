@@ -13,9 +13,9 @@ namespace calculateTree.free
 
         public Varible self { get; }
 
-        List<Node> param;
+        private List<Node> param;
 
-        ICalculateMethod method;
+        private ICalculateMethod method;
 
         public int Index { get; private set; }
 
@@ -34,7 +34,7 @@ namespace calculateTree.free
         {
             if (param!=null && index<param.Count)
             {
-                return param[index];
+                return param[index].Clone();
             }
             throw new ArgumentOutOfRangeException();
         }
@@ -47,23 +47,37 @@ namespace calculateTree.free
         }
 
 
-        public Node( Node parent, Varible varilbe, List<Node> param, ICalculateMethod method)
+        private Node Clone()
         {
-            if (varilbe==null || param==null || method==null)
+            Node copy = new Node(self);
+            copy.SetParams(parent, param, method);
+            return copy;
+        }
+
+        internal void SetParent(Node parent)
+        {
+            this.parent = parent;
+            if (this.parent == null)
+            {
+                Index = -1;
+            }
+        }
+
+        public void SetParams(Node parent, List<Node> param, ICalculateMethod method)
+        {
+            if ( param == null || method == null)
             {
                 throw new ArgumentNullException();
             }
             this.parent = parent;
-            if (this.parent==null)
+            if (this.parent == null)
             {
                 Index = -1;
             }
-            this.self = varilbe;
             this.param = param;
             this.method = method;
             int inde = 0;
-            param.ForEach(p=>p.Index=inde++);
-            
+            param.ForEach(p => p.Index = inde++);
         }
 
         private int locateVaribleIndex(string varible)
@@ -100,7 +114,7 @@ namespace calculateTree.free
        public List<string> GetAllVarible()
         {
             List<string> res = new List<string>();
-            if (!self.IsContant)
+            if (!self.IsContant && !self.IsTemp)
                 res.Add(self.name);
             if (param!=null && param.Count>0)
             {
@@ -148,18 +162,21 @@ namespace calculateTree.free
             }
         }
 
-        
+
         public dynamic InvokeMethod()
         {
             if (self.IsDirectGetAble)
             {
                 return self.GetValue();
             }
-            if (param!=null || method!=null ||param.Count==method.GetParamCount())
+            if (param != null || method != null || param.Count == method.GetParamCount())
             {
-               dynamic result = method.GetValue(param.Select(p=>p.self.GetValue()).ToArray());
+                List<dynamic> pp = new List<dynamic>();
+                param.ForEach(p=> pp.Add(p.InvokeMethod()));
+                dynamic result = method.GetValue(pp.ToArray());
+                return result;
             }
-            throw new CannotCalculate(string.Format("变量{0}为未知变量，不能计算",self.name));
+            throw new CannotCalculate(string.Format("变量{0}为未知变量，不能计算", self.name));
         }
 
 

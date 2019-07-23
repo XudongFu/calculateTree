@@ -14,11 +14,11 @@ namespace calculateTree.free.method
             if (method == "+")
                 return new Add();
             if (method == "-")
-                return new Add();
+                return new Sub();
             if (method == "*")
-                return new Add();
+                return new Mutiply();
             if (method == "/")
-                return new Add();
+                return new Divide();
             throw new NotImplementedException();
         }
 

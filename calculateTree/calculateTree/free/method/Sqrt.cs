@@ -10,7 +10,7 @@ namespace calculateTree.free.method
     {
         public Sqrt()
         {
-            Math.
+           
 
         }
 

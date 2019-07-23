@@ -35,7 +35,9 @@ namespace calculateTree.free.method
                 param.Add(currentNode.GetTopNode());
                 param.Add(currentNode.GetNode(paramIndex == 0 ? 1 : 0));
                 Mutiply sub = new Mutiply();
-                Node res = new Node(null, subNode.self, param, sub);
+                Node res = new Node(subNode.self);
+                param.ForEach(p => p.SetParent(res));
+                res.SetParams(null, param, sub);
                 sub.currentNode = res;
                 return res;
             }
@@ -45,7 +47,9 @@ namespace calculateTree.free.method
                 param.Add(currentNode.GetNode(0));
                 param.Add(currentNode.GetTopNode());
                 Divide sub = new Divide();
-                Node res = new Node(null, subNode.self, param, sub);
+                Node res = new Node(subNode.self);
+                param.ForEach(p => p.SetParent(res));
+                res.SetParams(null, param, sub);
                 sub.currentNode = res;
                 return res;
             }

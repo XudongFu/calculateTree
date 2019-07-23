@@ -88,6 +88,7 @@ namespace calculateTree.free
             this.value = val;
             this.IsKnown = true;
             this.IsContant = true;
+            this.IsValueSet = true;
         }
 
         internal void Execute( string calculateKey )
@@ -137,7 +138,38 @@ namespace calculateTree.free
                     throw new Exception(String.Format("varible {0} is Known,but GetValueMethod equal null", name));
                 }
             }
-            throw new Exception(string.Format( "给出条件不足或者其他原因无法计算变量{0}的值",name));
+
+            if (calculateTree.Values.Count!=0)
+            {
+                dynamic res = null;
+                var enu= calculateTree.Values.GetEnumerator();
+                Node cal = null;
+                do
+                {
+                    cal = enu.Current;
+
+                    if (cal.GetAllVarible().Count==0)
+                    {
+                        if (res == null)
+                        {
+                            res = cal.InvokeMethod();
+                        }
+                        else
+                        {
+                            dynamic temp = cal.InvokeMethod();
+                            if (temp!=res)
+                            {
+                                throw new Exception(string.Format("变量{0}获得多个不同的值",name));
+                            }
+                        }
+                    }
+                } while (enu.MoveNext());
+                if (res!=null)
+                {
+                    return res;
+                }
+            }
+            throw new Exception(string.Format("给出条件不足或者其他原因无法计算变量{0}的值", name));
         }
 
 
