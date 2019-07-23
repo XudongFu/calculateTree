@@ -22,7 +22,16 @@ namespace calculateTree.free.method
 
         public Node GetUnOpperationCalculateNode(int paramIndex)
         {
-            throw new NotImplementedException();
+            if (paramIndex < 0 || paramIndex >= GetParamCount())
+                throw new ArgumentException();
+            Node subNode = currentNode.GetNode(paramIndex);
+            List<Node> param = new List<Node>();
+            param.Add(currentNode.GetTopNode());
+            param.Add(currentNode.GetNode(paramIndex == 0 ? 1 : 0));
+            Divide sub = new Divide();
+            Node res = new Node(null, subNode.self, param, sub);
+            sub.currentNode = res;
+            return res;
         }
 
         public dynamic GetValue(params dynamic[] param)
