@@ -19,6 +19,8 @@ namespace calculateTree.free.method
                 return new Mutiply();
             if (method == "/")
                 return new Divide();
+            if (method == "sin")
+                return new Sin();
             throw new NotImplementedException();
         }
 

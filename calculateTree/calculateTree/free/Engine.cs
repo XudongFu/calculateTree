@@ -39,7 +39,7 @@ namespace calculateTree.free
         public string GetVaribleDescription(string name)
         {
             if (!varibleDic.ContainsKey(name))
-                return string.Format( "名为：{0}的变量不存在",name);
+                return string.Format("名为：{0}的变量不存在", name);
             StringBuilder builder = new StringBuilder();
             var res = varibleDic[name].GetAllDescription();
             return res;
@@ -54,6 +54,9 @@ namespace calculateTree.free
         {
             Node node;
             StringBuilder builder = new StringBuilder();
+#if DEBUG
+            node = analyse.Prase(expression);
+#else
             try
             {
                 node = analyse.Prase(expression);
@@ -62,8 +65,9 @@ namespace calculateTree.free
             {
                 return e.Message;
             }
+#endif
             List<string> varibles = node.GetAllRequiredVarible();
-            if (varibles != null )
+            if (varibles != null)
             {
                 if (varibles.Count > 0)
                 {
@@ -84,14 +88,14 @@ namespace calculateTree.free
                             Node temp = node.GetNodeFromParam(p);
                             if (temp != null)
                             {
-                                if (temp.GetAllRequiredVarible().Count ==0)
+                                if (temp.GetAllRequiredVarible().Count == 0)
                                 {
                                     var res = temp.InvokeMethod();
                                     vari.SetDefaultValue(res);
                                     Node final = new Node(vari);
                                     vari.AddCalculateTree(expression, final);
-                                    vari.AddCalculateTree(expression, temp);
-                                    builder.AppendLine(string.Format("{0}={1}",vari.name, res));
+                                    //vari.AddCalculateTree(expression, temp);
+                                    builder.AppendLine(string.Format("{0}={1}", vari.name, res));
                                 }
                                 else
                                 {

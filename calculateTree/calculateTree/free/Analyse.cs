@@ -63,8 +63,9 @@ namespace calculateTree.free
             if (functionName.Contains(curr))
             {
                 int paramCount = 1;
-                while (terms[index++]==",")
+                while (terms[index]==",")
                 {
+                    index++;
                     paramCount += 1;
                 }
                 Varible vari = new Varible();
