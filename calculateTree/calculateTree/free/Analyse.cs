@@ -56,6 +56,7 @@ namespace calculateTree.free
                 {
                     param.Add(ReadOneNode(terms,res,ref index));
                 }
+                param.Reverse();
                 res.SetParams(parentNode, param, method);
                 return res;
             }
@@ -78,6 +79,7 @@ namespace calculateTree.free
                 {
                     param.Add(ReadOneNode(terms, res, ref index));
                 }
+                param.Reverse();
                 res.SetParams(parentNode, param, method);
                 return res;
 
