@@ -55,6 +55,7 @@
     <Compile Include="free\method\CalculateFactory.cs" />
     <Compile Include="free\method\Cos.cs" />
     <Compile Include="free\method\Cot.cs" />
+    <Compile Include="free\method\Degrees.cs" />
     <Compile Include="free\method\Divide.cs" />
     <Compile Include="free\method\DivRem.cs" />
     <Compile Include="free\method\Exp.cs" />
@@ -63,11 +64,13 @@
     <Compile Include="free\method\Min.cs" />
     <Compile Include="free\method\Mutiply.cs" />
     <Compile Include="free\method\Pow.cs" />
+    <Compile Include="free\method\Radians.cs" />
     <Compile Include="free\method\Round.cs" />
     <Compile Include="free\method\Sin.cs" />
     <Compile Include="free\method\Sqrt.cs" />
     <Compile Include="free\method\Sub.cs" />
     <Compile Include="free\method\Tan.cs" />
+    <Compile Include="free\method\Utils.cs" />
     <Compile Include="free\Node.cs" />
     <Compile Include="free\Varible.cs" />
     <Compile Include="Program.cs" />

@@ -25,11 +25,15 @@ namespace calculateTree
             //Console.Write(engine.GetVaribleDescription("aa"));
 
             
-            string exp5 = "sin(3.14)";
-            res = engine.Parse(exp5);
+            //string exp5 = "sin(3.14)";
+            //res = engine.Parse(exp5);
+            //Console.Write(res);
+
+            string exp6 = "sin(Radians(a))+5*6-c=b";
+            res = engine.Parse(exp6);
             Console.Write(res);
-
-
+            Console.Write(engine.GetVaribleDescription("a"));
+            Console.Write(engine.GetVaribleDescription("c"));
             Console.ReadKey();
 
         }

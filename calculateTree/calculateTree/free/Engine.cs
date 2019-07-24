@@ -94,7 +94,7 @@ namespace calculateTree.free
                                     vari.SetDefaultValue(res);
                                     Node final = new Node(vari);
                                     vari.AddCalculateTree(expression, final);
-                                    //vari.AddCalculateTree(expression, temp);
+                                    vari.AddCalculateTree(expression, temp);
                                     builder.AppendLine(string.Format("{0}={1}", vari.name, res));
                                 }
                                 else

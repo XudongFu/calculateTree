@@ -193,7 +193,7 @@ namespace calculateTree.free
             StringBuilder builder = new StringBuilder();
             foreach (var node in calculateTree.Values)
             {
-                builder.AppendLine(node.ToString());
+                builder.AppendLine(string.Format(" {0} = {1}",name,node.ToString()));
             }
             return builder.ToString();
         }

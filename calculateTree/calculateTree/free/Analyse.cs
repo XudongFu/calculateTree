@@ -186,7 +186,7 @@ namespace calculateTree.free
                 }
                 if (opp.Any(p => p.ToString().Equals(nextterm)))
                 {
-                    while (operate.Count != 0 && operate.Peek() != "(" && level[operate.Peek()] >= level[nextterm])
+                    while (operate.Count != 0 && (functionName.Contains(operate.Peek()) || operate.Peek() != "(" && level[operate.Peek()] >= level[nextterm]))
                     {
                         result.Add(operate.Pop());
                     }

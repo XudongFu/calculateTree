@@ -12,17 +12,17 @@ namespace calculateTree.free.method
 
         public ICalculateMethod Clone()
         {
-            return new ACos();
+            return new Cos();
         }
 
         public string ConvertToString()
         {
-            throw new NotImplementedException();
+            return string.Format("{0}{1}", GetName(), Utils.AddBacket(currentNode.GetParamDescription(0)));
         }
 
         public string GetName()
         {
-            return this.GetType().Name;
+            return "cos";
         }
 
         public int GetParamCount()
@@ -32,7 +32,17 @@ namespace calculateTree.free.method
 
         public Node GetUnOpperationCalculateNode(int paramIndex)
         {
-            throw new NotImplementedException();
+            if (paramIndex < 0 || paramIndex >= GetParamCount())
+                throw new ArgumentException();
+            Node subNode = currentNode.GetNode(paramIndex);
+            List<Node> param = new List<Node>();
+            param.Add(currentNode.GetTopNode());
+            ACos sub = new ACos();
+            Node res = new Node(subNode.self);
+            param.ForEach(p => p.SetParent(res));
+            res.SetParams(null, param, sub);
+            sub.currentNode = res;
+            return res;
         }
 
         public dynamic GetValue(params dynamic[] param)
@@ -41,7 +51,7 @@ namespace calculateTree.free.method
             {
                 throw new ArgumentException(string.Format("{0}需要两个参数", GetName()));
             }
-            return Math.Acos(param[0]);
+            return Math.Cos(param[0]);
         }
     }
 }

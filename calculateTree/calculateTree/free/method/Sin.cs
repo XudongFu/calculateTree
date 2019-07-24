@@ -18,7 +18,7 @@ namespace calculateTree.free.method
 
         public string ConvertToString()
         {
-            return string.Format("{0}({1})", GetName(), currentNode.GetParamDescription(0));
+            return string.Format("{0}{1}", GetName(), Utils.AddBacket(currentNode.GetParamDescription(0)));
         }
 
         public string GetName()
@@ -38,8 +38,7 @@ namespace calculateTree.free.method
             Node subNode = currentNode.GetNode(paramIndex);
             List<Node> param = new List<Node>();
             param.Add(currentNode.GetTopNode());
-            param.Add(currentNode.GetNode(paramIndex == 0 ? 1 : 0));
-            Sub sub = new Sub();
+            ASin sub = new ASin();
             Node res = new Node(subNode.self);
             param.ForEach(p => p.SetParent(res));
             res.SetParams(null, param, sub);

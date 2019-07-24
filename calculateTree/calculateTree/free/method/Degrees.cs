@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace calculateTree.free.method
 {
-    class Cot : ICalculateMethod
+    class Degrees:ICalculateMethod
     {
         public Node currentNode { get; set; }
 
         public ICalculateMethod Clone()
         {
-            return new Cot();
+            return new Degrees();
         }
 
         public string ConvertToString()
@@ -22,7 +22,7 @@ namespace calculateTree.free.method
 
         public string GetName()
         {
-            return "cot";
+            return "Degrees";
         }
 
         public int GetParamCount()
@@ -37,7 +37,7 @@ namespace calculateTree.free.method
             Node subNode = currentNode.GetNode(paramIndex);
             List<Node> param = new List<Node>();
             param.Add(currentNode.GetTopNode());
-            ICalculateMethod sub = new Tan();
+            Radians sub = new Radians();
             Node res = new Node(subNode.self);
             param.ForEach(p => p.SetParent(res));
             res.SetParams(null, param, sub);
@@ -51,7 +51,7 @@ namespace calculateTree.free.method
             {
                 throw new ArgumentException(string.Format("{0}需要两个参数", GetName()));
             }
-            return 1.0/Math.Tan(param[0]);
+            return 180*param[0]/ Math.PI;
         }
     }
 }
