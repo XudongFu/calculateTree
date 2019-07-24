@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace calculateTree.free
 {
-    class Analyse
+    internal class Analyse
     {
         List<string> result = new List<string>();
 
@@ -29,21 +29,6 @@ namespace calculateTree.free
             operate.Clear();
             functionName.Clear();
             varibles.Clear();
-        }
-
-
-        public static void main()
-        {
-            string exp = "(23+34*45/(5+6+7))";
-            string exp2 = "1+2*aa";
-            string exp3 = "1+2*pow(4,(6+7.65*var)*2)=6";
-            string exp4 = "0.56";
-            Node ee = new Analyse().Prase(exp2);
-            if (ee.GetAllVarible().Count==0)
-            {
-                Console.WriteLine(ee.InvokeMethod());
-            }
-            //ee.ForEach(p => Console.Write(p + " "));
         }
         private Node toNode(List<string> terms)
         {
@@ -125,8 +110,12 @@ namespace calculateTree.free
             }
             if (!express.Contains("="))
             {
-                Node lefNode = GetNode(express);
-                return lefNode;
+                Node res = GetNode(express);
+                if (res.GetAllRequiredVarible().Count!=0)
+                {
+                    throw new ArgumentException("表达式不是等式且包含未知变量");
+                }
+                return res;
             }
             else
             {

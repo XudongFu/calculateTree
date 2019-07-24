@@ -63,5 +63,15 @@ namespace calculateTree.free.method
             }
             return param[0] / param[1];
         }
+
+        public ICalculateMethod Clone()
+        {
+            return new Divide();
+        }
+
+        public string ConvertToString()
+        {
+            return string.Format("({0}{1}{2})", currentNode.GetParamDescription(0), GetName(), currentNode.GetParamDescription(1));
+        }
     }
 }

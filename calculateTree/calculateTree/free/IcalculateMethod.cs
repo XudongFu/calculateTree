@@ -18,6 +18,10 @@ namespace calculateTree.free
 
         string GetName();
 
+        ICalculateMethod Clone();
+
+
+        string ConvertToString();
 
     }
 }

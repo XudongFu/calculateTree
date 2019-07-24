@@ -69,6 +69,7 @@ namespace calculateTree.free
             this.value = value;
             this.IsKnown = true;
             this.IsContant = true;
+            this.IsValueSet = true;
         }
 
 
@@ -148,7 +149,7 @@ namespace calculateTree.free
                 {
                     cal = enu.Current;
 
-                    if (cal.GetAllVarible().Count==0)
+                    if (cal.GetAllRequiredVarible().Count==0)
                     {
                         if (res == null)
                         {
@@ -170,6 +171,31 @@ namespace calculateTree.free
                 }
             }
             throw new Exception(string.Format("给出条件不足或者其他原因无法计算变量{0}的值", name));
+        }
+
+
+        public override string ToString()
+        {
+            if (IsDirectGetAble)
+            {
+                return Convert.ToString(GetValue());
+            }
+            //不是临时变量
+            if (!IsTemp)
+            {
+                return name;
+            }
+            throw new Exception("unexpected condition");
+        }
+
+        public string GetAllDescription()
+        {
+            StringBuilder builder = new StringBuilder();
+            foreach (var node in calculateTree.Values)
+            {
+                builder.AppendLine(node.ToString());
+            }
+            return builder.ToString();
         }
 
 

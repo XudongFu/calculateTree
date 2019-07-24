@@ -33,11 +33,11 @@ namespace calculateTree.free.method
             {
                 param.Add(currentNode.GetTopNode());
                 param.Add(currentNode.GetNode(paramIndex == 0 ? 1 : 0));
-                Add sub = new Add();
+                Add add = new Add();
                 Node res = new Node(subNode.self);
                 param.ForEach(p => p.SetParent(res));
-                res.SetParams(null, param, sub);
-                sub.currentNode = res;
+                res.SetParams(null, param, add);
+                add.currentNode = res;
                 return res;
             }
             //减
@@ -45,7 +45,7 @@ namespace calculateTree.free.method
             {
                 param.Add(currentNode.GetNode(0));
                 param.Add(currentNode.GetTopNode());
-                Add sub = new Add();
+                Sub sub = new Sub();
                 Node res = new Node(subNode.self);
                 param.ForEach(p => p.SetParent(res));
                 res.SetParams(null, param, sub);
@@ -61,6 +61,16 @@ namespace calculateTree.free.method
                 throw new ArgumentException("减法需要两个参数");
             }
             return param[0] - param[1];
+        }
+
+        public ICalculateMethod Clone()
+        {
+            return new Sub();
+        }
+
+        public string ConvertToString()
+        {
+            return string.Format("({0}{1}{2})", currentNode.GetParamDescription(0), GetName(), currentNode.GetParamDescription(1));
         }
     }
 }
