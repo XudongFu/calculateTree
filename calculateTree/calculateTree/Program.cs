@@ -37,11 +37,15 @@ namespace calculateTree
 
 
             List<string> test = new List<string>();
-            test.Add("aa+1=b");
+            test.Add("(a+1)*(9+c)=b*5");
+            test.Add("a");
+            test.Add("b");
+            test.Add("c");
             test.Add("b=5");
-            test.Add("aa");
+            test.Add("c=1");
+            test.Add("a");
             test.ForEach(p=> {
-                Console.WriteLine("输入为："+p);
+                Console.WriteLine(">:"+p);
                 Console.WriteLine(engine.Parse(p));
             });
 
