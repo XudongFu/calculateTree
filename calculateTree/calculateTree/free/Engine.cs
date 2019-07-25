@@ -63,26 +63,29 @@ namespace calculateTree.free
 
         private HashSet<string> notKnowVaribles = new HashSet<string>();
 
-        private Dictionary<string, Dictionary<string, List<string>>> allInfo = new Dictionary<string, Dictionary<string, List<string>>>();
-
-        private List<string> history = new List<string>();
-
         private void GetAllInfo()
         {
-            allInfo.Clear();
+            Dictionary<string, Dictionary<string, List<string>>> allInfo = new Dictionary<string, Dictionary<string, List<string>>>();
             varibleDic.ToList().ForEach(p =>
             {
                 allInfo.Add(p.Key, p.Value.GetCalculateInfo());
             });
-            List<Tuple<string, string>> steps = GetCalculateStep(allInfo);
+            //包含所有变量的计算步骤信息
+            List<Tuple<string, string>> steps = GetCalculateStep(allInfo,out HashSet<string> knowVari,out HashSet<string> notknowVari );
             steps.ForEach(p =>
             {
-                varibleDic[p.Item1].ExecuteKey = p.Item2;
-                varibleDic[p.Item1].RepireNode(h => varibleDic[h].GetExecute());
+                //对于已经修复过的节点不再进行处理
+                if (!this.knownVaribles.Contains(p.Item1))
+                {
+                    varibleDic[p.Item1].ExecuteKey = p.Item2;
+                    varibleDic[p.Item1].RepireNode(h => varibleDic[h].GetExecute());
+                }
             });
+            knownVaribles = knowVari;
+            notKnowVaribles = notknowVari;
         }
 
-        private List<Tuple<string, string>> GetCalculateStep(Dictionary<string, Dictionary<string, List<string>>> allInfo)
+        private List<Tuple<string, string>> GetCalculateStep(Dictionary<string, Dictionary<string, List<string>>> allInfo,out HashSet<string> outKnowVari,out HashSet<string> outNotKnowVari)
         {
             HashSet<string> knownVari = new HashSet<string>();
             HashSet<string> allVari = new HashSet<string>(varibleDic.Keys);
@@ -122,8 +125,8 @@ namespace calculateTree.free
 
             } while (lastKnownSize != knownVari.Count);
 
-            this.knownVaribles = knownVari;
-            this.notKnowVaribles = new HashSet<string>(allVari.Except(knownVaribles).ToList());
+            outKnowVari = knownVari;
+            outNotKnowVari = new HashSet<string>(allVari.Except(knownVaribles).ToList());
             return steps;
         }
 
@@ -138,7 +141,6 @@ namespace calculateTree.free
             StringBuilder builder = new StringBuilder();
 #if DEBUG
             node = analyse.Prase(expression);
-            history.Add(expression);
 #else
             try
             {
@@ -198,6 +200,7 @@ namespace calculateTree.free
                     builder.AppendLine(string.Format("{0}", node.InvokeMethod()));
                 }
             }
+            GetAllInfo();
             return builder.ToString();
         }
         

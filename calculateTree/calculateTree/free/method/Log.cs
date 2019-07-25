@@ -12,12 +12,12 @@ namespace calculateTree.free.method
 
         public ICalculateMethod Clone()
         {
-            return new ACos();
+            return new Log();
         }
 
         public string ConvertToString()
         {
-            throw new NotImplementedException();
+            return string.Format("{0}({1},{2})", GetName(), currentNode.GetParamDescription(0), currentNode.GetParamDescription(1));
         }
 
         public string GetName()
@@ -41,7 +41,8 @@ namespace calculateTree.free.method
             {
                 throw new ArgumentException(string.Format("{0}需要两个参数", GetName()));
             }
-            return Math.Acos(param[0]);
+            //todo 这里存在问题
+            return Math.Log(param[0],param[1]);
         }
     }
 }

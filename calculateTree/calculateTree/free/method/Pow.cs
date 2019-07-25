@@ -12,12 +12,12 @@ namespace calculateTree.free.method
 
         public ICalculateMethod Clone()
         {
-            return new ACos();
+            return new Pow();
         }
 
         public string ConvertToString()
         {
-            throw new NotImplementedException();
+            return string.Format("{0}({1},{2})",  GetName(), currentNode.GetParamDescription(0), currentNode.GetParamDescription(1));
         }
 
         public string GetName()
@@ -27,13 +27,58 @@ namespace calculateTree.free.method
 
         public int GetParamCount()
         {
-            return 1;
+            return 2;
         }
 
         public Node GetUnOpperationCalculateNode(int paramIndex)
         {
-            throw new NotImplementedException();
+            if (paramIndex < 0 || paramIndex >= GetParamCount())
+                throw new ArgumentException();
+            if (paramIndex == 0)
+            {
+                Node subNode = currentNode.GetNode(paramIndex);
+                List<Node> param = new List<Node>();
+                param.Add(currentNode.GetTopNode());
+                param.Add(GetReciprocal(currentNode.GetNode(1)));
+                Sub sub = new Sub();
+                Node res = new Node(subNode.self);
+                param.ForEach(p => p.SetParent(res));
+                res.SetParams(null, param, sub);
+                sub.currentNode = res;
+                return res;
+
+            }
+            else
+            {
+                Node subNode = currentNode.GetNode(paramIndex);
+                List<Node> param = new List<Node>();
+                param.Add(currentNode.GetNode(0));
+                param.Add(currentNode.GetTopNode());
+                Log sub = new Log();
+                Node res = new Node(subNode.self);
+                param.ForEach(p => p.SetParent(res));
+                res.SetParams(null, param, sub);
+                sub.currentNode = res;
+                return res;
+            }
         }
+
+
+        Node GetReciprocal(Node node)
+        {
+            Varible varible = new Varible("1", 1);
+            Node leftNode = new Node(varible);
+            Node topNode = new Node(new Varible());
+            List<Node> param = new List<Node>();
+            param.Add(leftNode);
+            param.Add(node);
+            ICalculateMethod method = new Divide();
+            topNode.SetParams(null,param,method);
+            param.ForEach(p => p.SetParent(topNode));
+            method.currentNode = topNode;
+            return topNode;
+        }
+
 
         public dynamic GetValue(params dynamic[] param)
         {
@@ -41,7 +86,7 @@ namespace calculateTree.free.method
             {
                 throw new ArgumentException(string.Format("{0}需要两个参数", GetName()));
             }
-            return Math.Acos(param[0]);
+            return Math.Pow(param[0], param[1]);
         }
     }
 }
