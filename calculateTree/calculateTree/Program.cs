@@ -11,7 +11,7 @@ namespace calculateTree
     {
         static void Main(string[] args)
         {
-            Engine engine = new Engine();
+            CalculateEngine engine = new CalculateEngine();
 
             string res = "";
             string exp = "(23+34*45/(5+6+7))";
@@ -19,21 +19,23 @@ namespace calculateTree
             string exp4 = "0.56";
 
 
-            //string exp2 = "1+aa*2+(10-2)=0";
-            //res = engine.Parse(exp2);
-            //Console.Write(res);
-            //Console.Write(engine.GetVaribleDescription("aa"));
+            string exp2 = "1+aa*2+(10-2)=0";
+            res = engine.Parse(exp2);
+            Console.Write(res);
+            Console.Write(engine.GetVaribleDescription("aa"));
 
-            
+
             //string exp5 = "sin(3.14)";
             //res = engine.Parse(exp5);
             //Console.Write(res);
 
-            string exp6 = "sin(Radians(a))+5*6-c=b";
+            string exp6 = "sin(Radians(a))+5.25*6-c=b*0.05";
             res = engine.Parse(exp6);
             Console.Write(res);
             Console.Write(engine.GetVaribleDescription("a"));
             Console.Write(engine.GetVaribleDescription("c"));
+
+
             Console.ReadKey();
 
         }

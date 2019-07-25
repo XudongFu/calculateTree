@@ -13,9 +13,9 @@ namespace calculateTree.free
 
         public Varible self { get; }
 
-        private List<Node> param;
+        internal List<Node> Param { get;set; }
 
-        private ICalculateMethod method;
+        internal ICalculateMethod Method { get; set; }
 
         public int Index { get; private set; }
 
@@ -32,18 +32,18 @@ namespace calculateTree.free
 
         public Node GetNode(int index)
         {
-            if (param != null && index < param.Count)
+            if (Param != null && index < Param.Count)
             {
-                return param[index].Clone();
+                return Param[index].Clone();
             }
             throw new ArgumentOutOfRangeException();
         }
 
         internal string GetParamDescription(int index)
         {
-            if (param != null && index < param.Count)
+            if (Param != null && index < Param.Count)
             {
-                return param[index].ToString();
+                return Param[index].ToString();
             }
             throw new ArgumentOutOfRangeException();
         }
@@ -58,9 +58,9 @@ namespace calculateTree.free
         {
             Node copy = new Node(self);
             if (includeparam)
-                copy.SetParams(parent, param, method);
+                copy.SetParams(parent, Param, Method);
             else
-                copy.SetParams(parent, null, method);
+                copy.SetParams(parent, null, Method);
             return copy;
         }
 
@@ -82,26 +82,26 @@ namespace calculateTree.free
             }
             if (param != null)
             {
-                this.param = param;
+                this.Param = param;
                 int inde = 0;
                 param.ForEach(p => p.Index = inde++);
             }
             if (method != null)
             {
-                this.method = method.Clone();
-                this.method.currentNode = this;
+                this.Method = method.Clone();
+                this.Method.currentNode = this;
             }
         }
 
         private int locateVaribleIndex(string varible)
         {
-            if (param != null && param.Count > 0)
+            if (Param != null && Param.Count > 0)
             {
                 Dictionary<string, int> dic = new Dictionary<string, int>();
                 int i = 0;
                 try
                 {
-                    param.ForEach(p =>
+                    Param.ForEach(p =>
                     {
                         dic.Add(p.self.name, i++);
                     });
@@ -139,9 +139,9 @@ namespace calculateTree.free
             List<string> res = new List<string>();
             if (!self.IsContant && !self.IsTemp)
                 res.Add(self.name);
-            if (param != null && param.Count > 0)
+            if (Param != null && Param.Count > 0)
             {
-                param.ForEach(p => res.AddRange(p.GetAllVaribles()));
+                Param.ForEach(p => res.AddRange(p.GetAllVaribles()));
             }
             return res;
         }
@@ -151,7 +151,7 @@ namespace calculateTree.free
             Node node = null;
             this.ConditionAction(p =>
             {
-                if (p.param != null && p.param.Any(t => t.self.name.Equals(varible)))
+                if (p.Param != null && p.Param.Any(t => t.self.name.Equals(varible)))
                     return true;
                 else
                     return false;
@@ -159,7 +159,7 @@ namespace calculateTree.free
             h =>
             {
                 int index = h.locateVaribleIndex(varible);
-                node = h.method.GetUnOpperationCalculateNode(index);
+                node = h.Method.GetUnOpperationCalculateNode(index);
             });
             if (node != null)
                 return node;
@@ -170,11 +170,11 @@ namespace calculateTree.free
 
         public Node GetNodeFromParam(int index)
         {
-            return method.GetUnOpperationCalculateNode(index);
+            return Method.GetUnOpperationCalculateNode(index);
         }
 
 
-        private void ConditionAction(Func<Node, bool> prediction, Action<Node> action)
+        internal void ConditionAction(Func<Node, bool> prediction, Action<Node> action)
         {
             if (prediction == null || action == null)
                 throw new ArgumentNullException();
@@ -182,9 +182,9 @@ namespace calculateTree.free
             {
                 action(this);
             }
-            if (param != null && param.Count > 0)
+            if (Param != null && Param.Count > 0)
             {
-                param.ForEach(p => p.ConditionAction(prediction, action));
+                Param.ForEach(p => p.ConditionAction(prediction, action));
             }
         }
 
@@ -195,11 +195,11 @@ namespace calculateTree.free
             {
                 return self.GetValue();
             }
-            if (param != null || method != null || param.Count == method.GetParamCount())
+            if (Param != null || Method != null || Param.Count == Method.GetParamCount())
             {
                 List<dynamic> pp = new List<dynamic>();
-                param.ForEach(p => pp.Add(p.InvokeMethod()));
-                dynamic result = method.GetValue(pp.ToArray());
+                Param.ForEach(p => pp.Add(p.InvokeMethod()));
+                dynamic result = Method.GetValue(pp.ToArray());
                 return result;
             }
             throw new CannotCalculate(string.Format("变量{0}为未知变量，不能计算", self.name));
@@ -208,11 +208,11 @@ namespace calculateTree.free
 
         public override string ToString()
         {
-            if (method == null ||param == null)
+            if (Method == null ||Param == null)
             {
                 return self.ToString();
             }
-            return method.ConvertToString();
+            return Method.ConvertToString();
         }
 
 

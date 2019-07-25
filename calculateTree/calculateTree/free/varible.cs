@@ -30,7 +30,6 @@ namespace calculateTree.free
 
         private dynamic value;
 
-
         string GetName()
         {
             string res = "temp_" + key;
@@ -103,6 +102,8 @@ namespace calculateTree.free
             throw new Exception(string.Format("",calculateKey));
         }
 
+        
+        
         internal void Clear()
         {
             value = null;
@@ -117,12 +118,23 @@ namespace calculateTree.free
             }
         }
 
+        public string ExecuteKey { get; set; } = "";
 
         internal void AddCalculateTree(string key,Node node)
         {
             this.calculateTree[key] = node;
         }
 
+
+        internal Dictionary<string, List<string>> GetCalculateInfo()
+        {
+            Dictionary<string, List<string>> res = new Dictionary<string, List<string>>();
+            foreach (var node in calculateTree.ToList())
+            {
+                res.Add(node.Key,node.Value.GetAllRequiredVarible());
+            }
+            return res;
+        }
 
         public dynamic GetValue()
         {
@@ -138,6 +150,11 @@ namespace calculateTree.free
                 {
                     throw new Exception(String.Format("varible {0} is Known,but GetValueMethod equal null", name));
                 }
+            }
+
+            if (calculateTree.ContainsKey(ExecuteKey))
+            {
+                return calculateTree[ExecuteKey].InvokeMethod();
             }
 
             if (calculateTree.Values.Count!=0)
@@ -172,6 +189,50 @@ namespace calculateTree.free
             }
             throw new Exception(string.Format("给出条件不足或者其他原因无法计算变量{0}的值", name));
         }
+
+
+        internal void RepireNode(Func<string, Node> func)
+        {
+            if (func == null)
+            {
+                throw new ArgumentNullException();
+            }
+            if (!calculateTree.ContainsKey(ExecuteKey))
+            {
+                throw new Exception("没有设定执行键或计算节点不包含执行键");
+            }
+            var executeNode = calculateTree[ExecuteKey];
+            var vari = executeNode.GetAllRequiredVarible();
+            vari.ForEach(p =>
+            {
+                executeNode.ConditionAction(
+                f =>
+                {
+                    if (f.self.name == p)
+                        return true;
+                    else
+                        return false;
+
+                }, h =>
+                {
+                    Node node = func(p);
+                    h.Param = node.Param;
+                    h.Method = node.Method;
+
+                });
+            });
+        }
+
+
+        internal Node GetExecute()
+        {
+            if (!calculateTree.ContainsKey(ExecuteKey))
+            {
+                throw new Exception("unexpected condition");
+            }
+            return calculateTree[ExecuteKey];
+        }
+
 
 
         public override string ToString()

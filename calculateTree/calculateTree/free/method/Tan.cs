@@ -49,7 +49,7 @@ namespace calculateTree.free.method
         {
             if (param == null || param.Count() != GetParamCount())
             {
-                throw new ArgumentException(string.Format("{0}需要两个参数", GetName()));
+                throw new ArgumentException(string.Format("{0}需要一个参数", GetName()));
             }
             return Math.Tan(param[0]);
         }

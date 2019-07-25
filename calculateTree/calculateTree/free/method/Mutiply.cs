@@ -52,7 +52,7 @@ namespace calculateTree.free.method
 
         public string ConvertToString()
         {
-            return string.Format("({0}{1}{2})", currentNode.GetParamDescription(0), GetName(), currentNode.GetParamDescription(1));
+            return string.Format("{0}{1}{2}", currentNode.GetParamDescription(0), GetName(), currentNode.GetParamDescription(1));
         }
     }
 }
