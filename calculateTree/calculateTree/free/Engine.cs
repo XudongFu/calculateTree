@@ -79,6 +79,7 @@ namespace calculateTree.free
                 {
                     varibleDic[p.Item1].ExecuteKey = p.Item2;
                     varibleDic[p.Item1].RepireNode(h => varibleDic[h].GetExecute());
+                    varibleDic[p.Item1].Execute();
                 }
             });
             knownVaribles = knowVari;
@@ -98,6 +99,7 @@ namespace calculateTree.free
                     {
                         knownVari.Add(vari.Key);
                         allVari.Remove(vari.Key);
+                        steps.Add(new Tuple<string, string>(vari.Key,node.Key));
                     }
                 }
             }
@@ -181,7 +183,9 @@ namespace calculateTree.free
                                     Node final = new Node(vari);
                                     vari.AddCalculateTree(expression, final);
                                     vari.AddCalculateTree(expression, temp);
-                                    builder.AppendLine(string.Format("{0}={1}", vari.name, res));
+                                    vari.ExecuteKey = expression;
+                                    vari.Execute();
+                                    builder.AppendLine(vari.GetAllDescription());
                                 }
                                 else
                                 {
@@ -197,7 +201,10 @@ namespace calculateTree.free
                 }
                 else
                 {
-                    builder.AppendLine(string.Format("{0}", node.InvokeMethod()));
+                    if (node.self.IsDirectGetAble)
+                        builder.AppendLine(string.Format("{0}", node.InvokeMethod()));
+                    else
+                        builder.AppendLine(string.Format("{0}", GetVaribleDescription(node.self.name)));
                 }
             }
             GetAllInfo();

@@ -91,15 +91,16 @@ namespace calculateTree.free
             this.IsValueSet = true;
         }
 
-        internal void Execute( string calculateKey )
+        internal void Execute()
         {
-            if (this.calculateTree.ContainsKey(calculateKey))
+            if (this.calculateTree.ContainsKey(ExecuteKey))
             {
-                var result = calculateTree[calculateKey].InvokeMethod();
+                var result = calculateTree[ExecuteKey].InvokeMethod();
                 this.value = result;
                 this.IsValueSet = true;
             }
-            throw new Exception(string.Format("",calculateKey));
+            else
+                throw new Exception(string.Format("没有名为：{0}的计算键", ExecuteKey));
         }
 
         
@@ -252,9 +253,21 @@ namespace calculateTree.free
         public string GetAllDescription()
         {
             StringBuilder builder = new StringBuilder();
-            foreach (var node in calculateTree.Values)
+            if (!string.IsNullOrEmpty(ExecuteKey))
             {
-                builder.AppendLine(string.Format(" {0} = {1}",name,node.ToString()));
+                if (IsValueSet)
+                {
+                    builder.AppendLine(string.Format(" {0} | {1} = {2} = {3}",value, name, calculateTree[ExecuteKey].ToString(),value));
+                }
+                else
+                    throw new Exception("unexpected condition");
+            }
+            else
+            {
+                foreach (var node in calculateTree.Values)
+                {
+                    builder.AppendLine(string.Format(" {0} = {1}", name, node.ToString()));
+                }
             }
             return builder.ToString();
         }
