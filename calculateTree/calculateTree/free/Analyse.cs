@@ -40,7 +40,14 @@ namespace calculateTree.free
             }
             terms.Reverse();
             int index = 0;
-            return ReadOneNode(terms, null, ref index); ;
+            try
+            {
+                return ReadOneNode(terms, null, ref index); ;
+            }
+            catch (Exception e)
+            {
+                throw new Exception("请检查输入的表达式");
+            }
         }
 
         private Node ReadOneNode(List<string> terms, Node parentNode, ref int index)
@@ -94,7 +101,8 @@ namespace calculateTree.free
 
             if (float.TryParse(curr, out float val))
             {
-                Varible vari = new Varible(curr,val);
+                Varible vari = new Varible();
+                vari.SetDefaultValue(val);
                 Node res = new Node(vari);
                 return res;
             }
@@ -125,7 +133,7 @@ namespace calculateTree.free
                 string[] exp = express.Split('=');
                 if (exp.Length != 2)
                 {
-                    throw new ArgumentException("表达式包含多个等号");
+                    throw new ArgumentException("表达式包含多个等号，表达式必须是可以计算的表达式或者包含变量的等式");
                 }
                 Node lefNode = GetNode(exp[0]);
                 Node rightNode = GetNode(exp[1]);

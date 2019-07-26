@@ -16,6 +16,9 @@ namespace calculateTree.free
 
         private Analyse analyse = new Analyse();
 
+        private HashSet<string> knownVaribles = new HashSet<string>();
+
+        private HashSet<string> notKnowVaribles = new HashSet<string>();
         public void SetVaribles(string name, Func<dynamic> getValue)
         {
             if (string.IsNullOrEmpty(name) || getValue == null)
@@ -36,7 +39,6 @@ namespace calculateTree.free
                 varibleDic.Add(name, new Varible(name, value));
         }
 
-
         public string GetVaribleDescription(string name)
         {
             if (!varibleDic.ContainsKey(name))
@@ -45,7 +47,6 @@ namespace calculateTree.free
             var res = varibleDic[name].GetAllDescription();
             return res;
         }
-
 
         public dynamic GetVarileValue(string name)
         {
@@ -57,11 +58,6 @@ namespace calculateTree.free
             }
             throw new Exception(string.Format("名为：{0}的变量条件不足无法计算", name));
         }
-
-
-        private HashSet<string> knownVaribles = new HashSet<string>();
-
-        private HashSet<string> notKnowVaribles = new HashSet<string>();
 
         private void GetAllInfo()
         {
@@ -131,7 +127,6 @@ namespace calculateTree.free
             outNotKnowVari = new HashSet<string>(allVari.Except(knownVaribles).ToList());
             return steps;
         }
-
         
         /// <summary>
         /// 当前解析的表达式仅限于等式，还不支持不等式
@@ -147,7 +142,6 @@ namespace calculateTree.free
             try
             {
                 node = analyse.Prase(expression);
-                history.Add(expression);
             }
             catch (Exception e)
             {
@@ -201,14 +195,19 @@ namespace calculateTree.free
                 }
                 else
                 {
-                    if (node.self.IsDirectGetAble)
+                    if (node.self.IsDirectGetAble || node.self.IsTemp)
                         builder.AppendLine(string.Format("{0}", node.InvokeMethod()));
                     else
                         builder.AppendLine(string.Format("{0}", GetVaribleDescription(node.self.name)));
                 }
             }
             GetAllInfo();
-            return builder.ToString();
+            var resp= builder.ToString();
+            if (resp == "")
+            {
+                resp = "ok";
+            }
+            return resp;
         }
         
 
@@ -217,6 +216,15 @@ namespace calculateTree.free
             StringBuilder builder = new StringBuilder();
             return builder.ToString();
         }
+
+        public void Clear()
+        {
+            varibleDic.Clear();
+            knownVaribles.Clear();
+            notKnowVaribles.Clear();
+        }
+
+
 
     }
 }

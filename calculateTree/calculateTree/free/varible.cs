@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace calculateTree.free
 {
+    /// <summary>
+    /// 变量要么是字母那种变量，要么就是临时变量，所有的固定的数字都是临时变量
+    /// </summary>
     internal class Varible
     {
         private static int key = 1;
@@ -85,6 +88,7 @@ namespace calculateTree.free
         public Varible(string name,dynamic val)
         {
             this.name = name;
+            this.IsTemp = false;
             this.value = val;
             this.IsKnown = true;
             this.IsContant = true;
