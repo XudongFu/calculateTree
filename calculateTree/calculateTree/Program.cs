@@ -48,7 +48,7 @@ namespace calculateTree
             //    Console.WriteLine(engine.Parse(p));
             //});
             Begin:
-            string helpText ="CalculateTree:" +"变量解析程序，穿透变量的关系，计算变量与变量的关系，计算变量的值";
+            string helpText ="CalculateTree:" +"变量解析程序，计算变量与变量的关系，计算变量的值";
             Console.WriteLine(helpText);
 
             while (true)
