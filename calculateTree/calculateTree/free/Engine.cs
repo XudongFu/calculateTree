@@ -12,21 +12,29 @@ namespace calculateTree.free
     /// </summary>
     public class CalculateEngine
     {
-        private Dictionary<string, Varible> varibleDic = new Dictionary<string, Varible>();
+        internal Dictionary<string, Varible> varibleDic = new Dictionary<string, Varible>();
 
-        private Analyse analyse = new Analyse();
+        private Analyse analyse;
 
         private HashSet<string> knownVaribles = new HashSet<string>();
 
         private HashSet<string> notKnowVaribles = new HashSet<string>();
+
+        public CalculateEngine()
+        {
+            analyse = new Analyse(this);
+        }
+
+
         public void SetVaribles(string name, Func<dynamic> getValue)
         {
             if (string.IsNullOrEmpty(name) || getValue == null)
                 throw new ArgumentNullException();
             if (varibleDic.ContainsKey(name))
-                varibleDic[name] = new Varible(name, getValue);
+                varibleDic[name].SetGetValueMethod(getValue);
             else
                 varibleDic.Add(name, new Varible(name, getValue));
+            GetAllInfo();
         }
 
         public void SetContantVarible(string name, dynamic value)
@@ -34,9 +42,10 @@ namespace calculateTree.free
             if (string.IsNullOrEmpty(name) || value == null)
                 throw new ArgumentNullException();
             if (varibleDic.ContainsKey(name))
-                varibleDic[name] = new Varible(name, value);
+                varibleDic[name].SetDefaultValue(value);
             else
                 varibleDic.Add(name, new Varible(name, value));
+            GetAllInfo();
         }
 
         public string GetVaribleDescription(string name)
@@ -65,37 +74,47 @@ namespace calculateTree.free
             varibleDic.ToList().ForEach(p =>
             {
                 allInfo.Add(p.Key, p.Value.GetCalculateInfo());
+                if (p.Value.IsKnown)
+                    knownVaribles.Add(p.Key);
             });
             //包含所有变量的计算步骤信息
-            List<Tuple<string, string>> steps = GetCalculateStep(allInfo,out HashSet<string> knowVari,out HashSet<string> notknowVari );
+            List<Tuple<string, string>> steps = GetCalculateStep(allInfo, out HashSet<string> knowVari, out HashSet<string> notknowVari);
             steps.ForEach(p =>
             {
                 //对于已经修复过的节点不再进行处理
-                if (!this.knownVaribles.Contains(p.Item1))
+                if (!this.knownVaribles.Contains(p.Item1) && !varibleDic[p.Item1].IsDirectGetAble)
                 {
                     varibleDic[p.Item1].ExecuteKey = p.Item2;
                     varibleDic[p.Item1].RepireNode(h => varibleDic[h].GetExecute());
                     varibleDic[p.Item1].Execute();
                 }
             });
-            knownVaribles = knowVari;
+            knowVari.ToList().ForEach(p => knownVaribles.Add(p));
             notKnowVaribles = notknowVari;
         }
 
-        private List<Tuple<string, string>> GetCalculateStep(Dictionary<string, Dictionary<string, List<string>>> allInfo,out HashSet<string> outKnowVari,out HashSet<string> outNotKnowVari)
+        private List<Tuple<string, string>> GetCalculateStep(Dictionary<string, Dictionary<string, List<string>>> allInfo, out HashSet<string> outKnowVari, out HashSet<string> outNotKnowVari)
         {
-            HashSet<string> knownVari = new HashSet<string>();
+            HashSet<string> knownVari = new HashSet<string>(knownVaribles);
             HashSet<string> allVari = new HashSet<string>(varibleDic.Keys);
             List<Tuple<string, string>> steps = new List<Tuple<string, string>>();
             foreach (var vari in allInfo.ToList())
             {
+                if (knownVaribles.Contains(vari.Key))
+                    continue;
                 foreach (var node in vari.Value.ToList())
                 {
                     if (node.Value.Count == 0)
                     {
                         knownVari.Add(vari.Key);
                         allVari.Remove(vari.Key);
-                        steps.Add(new Tuple<string, string>(vari.Key,node.Key));
+                        steps.Add(new Tuple<string, string>(vari.Key, node.Key));
+                    }
+                    else if (!node.Value.Any(p=>!knownVari.Contains(p)))
+                    {
+                        knownVari.Add(vari.Key);
+                        allVari.Remove(vari.Key);
+                        steps.Add(new Tuple<string, string>(vari.Key, node.Key));
                     }
                 }
             }
@@ -209,7 +228,13 @@ namespace calculateTree.free
             }
             return resp;
         }
-        
+
+
+        internal void AddVari(string name,Varible vari)
+        {
+            varibleDic[name] = vari;
+        }
+
 
         internal string PrintDebugInfo()
         {

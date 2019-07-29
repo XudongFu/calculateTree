@@ -167,10 +167,9 @@ namespace calculateTree.free
                 dynamic res = null;
                 var enu= calculateTree.Values.GetEnumerator();
                 Node cal = null;
-                do
+                while (enu.MoveNext())
                 {
                     cal = enu.Current;
-
                     if (cal.GetAllRequiredVarible().Count==0)
                     {
                         if (res == null)
@@ -186,7 +185,7 @@ namespace calculateTree.free
                             }
                         }
                     }
-                } while (enu.MoveNext());
+                } 
                 if (res!=null)
                 {
                     return res;
@@ -231,14 +230,19 @@ namespace calculateTree.free
 
         internal Node GetExecute()
         {
-            if (!calculateTree.ContainsKey(ExecuteKey))
+            if (IsDirectGetAble)
             {
-                throw new Exception("unexpected condition");
+                return new Node(this);
             }
-            return calculateTree[ExecuteKey];
+            else
+            {
+                if (!calculateTree.ContainsKey(ExecuteKey))
+                {
+                    throw new Exception("unexpected condition");
+                }
+                return calculateTree[ExecuteKey];
+            }
         }
-
-
 
         public override string ToString()
         {

@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.26228.4
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "calculateTree", "calculateTree\calculateTree.csproj", "{C98E853F-0B4A-498E-97FE-60E470085236}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "calculateTreeTests", "calculateTreeTests\calculateTreeTests.csproj", "{967DFBB6-A389-4F04-A107-3BEE5F209818}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,8 +17,15 @@ Global
 		{C98E853F-0B4A-498E-97FE-60E470085236}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C98E853F-0B4A-498E-97FE-60E470085236}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C98E853F-0B4A-498E-97FE-60E470085236}.Release|Any CPU.Build.0 = Release|Any CPU
+		{967DFBB6-A389-4F04-A107-3BEE5F209818}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{967DFBB6-A389-4F04-A107-3BEE5F209818}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{967DFBB6-A389-4F04-A107-3BEE5F209818}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{967DFBB6-A389-4F04-A107-3BEE5F209818}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AF622711-142A-4E07-A6C6-33484E5E2F8D}
 	EndGlobalSection
 EndGlobal

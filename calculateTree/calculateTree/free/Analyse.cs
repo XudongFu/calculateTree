@@ -23,6 +23,14 @@ namespace calculateTree.free
 
         Dictionary<string, int> level = new Dictionary<string, int>() { {",",0 }, {"+",1 },{"-",1 } , { "*", 2 }, { "/", 2 } };
 
+        CalculateEngine engine;
+
+        public Analyse(CalculateEngine engine)
+        {
+            this.engine = engine;
+        }
+
+
         private void Clear()
         {
             result.Clear();
@@ -94,7 +102,16 @@ namespace calculateTree.free
             }
             if (varibles.Contains(curr))
             {
-                Varible vari = new Varible(curr);
+                Varible vari;
+                if (engine.varibleDic.ContainsKey(curr))
+                {
+                    vari = engine.varibleDic[curr];
+                }
+                else
+                {
+                    vari = new Varible(curr);
+                    engine.AddVari(curr, vari);
+                }
                 Node res = new Node(vari);
                 return res;
             }
