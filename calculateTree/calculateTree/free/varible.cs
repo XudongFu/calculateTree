@@ -17,7 +17,7 @@ namespace calculateTree.free
 
         private Func<dynamic> GetValueMethod;
 
-        private Dictionary<string, Node> calculateTree=new Dictionary<string, Node>();
+        private Dictionary<string, Node> calculateTree = new Dictionary<string, Node>();
 
         private bool IsValueSet = false;
 
@@ -50,7 +50,7 @@ namespace calculateTree.free
             IsContant = false;
             IsValueSet = false;
         }
-        
+
         public Varible(string name)
         {
             this.name = name;
@@ -74,8 +74,6 @@ namespace calculateTree.free
             this.IsValueSet = true;
         }
 
-
-
         public Varible(string name, Func<dynamic> getValue)
         {
             IsTemp = false;
@@ -85,7 +83,7 @@ namespace calculateTree.free
             this.IsContant = false;
         }
 
-        public Varible(string name,dynamic val)
+        public Varible(string name, dynamic val)
         {
             this.name = name;
             this.IsTemp = false;
@@ -107,70 +105,50 @@ namespace calculateTree.free
                 throw new Exception(string.Format("没有名为：{0}的计算键", ExecuteKey));
         }
 
-        
-        
         internal void Clear()
         {
             value = null;
             IsValueSet = false;
         }
 
-
-        internal bool IsDirectGetAble {
-
-            get {
-                return IsValueSet || IsKnown;
-            }
-        }
-
         public string ExecuteKey { get; set; } = "";
 
-        internal void AddCalculateTree(string key,Node node)
+        internal void AddCalculateTree(string key, Node node)
         {
             this.calculateTree[key] = node;
         }
-
 
         internal Dictionary<string, List<string>> GetCalculateInfo()
         {
             Dictionary<string, List<string>> res = new Dictionary<string, List<string>>();
             foreach (var node in calculateTree.ToList())
             {
-                res.Add(node.Key,node.Value.GetAllRequiredVarible());
+                res.Add(node.Key, node.Value.GetAllRequiredVarible());
             }
             return res;
         }
 
         public dynamic GetValue()
         {
-            if (IsValueSet)
-                return value;
-            if (IsKnown)
+            if (GetValueMethod != null)
             {
-                if (GetValueMethod != null)
-                {
-                    return GetValueMethod();
-                }
-                else
-                {
-                    throw new Exception(String.Format("varible {0} is Known,but GetValueMethod equal null", name));
-                }
+                return GetValueMethod();
             }
-
+            if (IsContant)
+                return value;
             if (calculateTree.ContainsKey(ExecuteKey))
             {
                 return calculateTree[ExecuteKey].InvokeMethod();
             }
-
-            if (calculateTree.Values.Count!=0)
+            if (calculateTree.Values.Count != 0)
             {
                 dynamic res = null;
-                var enu= calculateTree.Values.GetEnumerator();
+                var enu = calculateTree.Values.GetEnumerator();
                 Node cal = null;
                 while (enu.MoveNext())
                 {
                     cal = enu.Current;
-                    if (cal.GetAllRequiredVarible().Count==0)
+                    if (cal.GetAllRequiredVarible().Count == 0)
                     {
                         if (res == null)
                         {
@@ -179,21 +157,20 @@ namespace calculateTree.free
                         else
                         {
                             dynamic temp = cal.InvokeMethod();
-                            if (temp!=res)
+                            if (temp != res)
                             {
-                                throw new Exception(string.Format("变量{0}获得多个不同的值",name));
+                                throw new Exception(string.Format("变量{0}获得多个不同的值", name));
                             }
                         }
                     }
-                } 
-                if (res!=null)
+                }
+                if (res != null)
                 {
                     return res;
                 }
             }
             throw new Exception(string.Format("给出条件不足或者其他原因无法计算变量{0}的值", name));
         }
-
 
         internal void RepireNode(Func<string, Node> func)
         {
@@ -227,10 +204,9 @@ namespace calculateTree.free
             });
         }
 
-
         internal Node GetExecute()
         {
-            if (IsDirectGetAble)
+            if (IsKnown)
             {
                 return new Node(this);
             }
@@ -246,7 +222,7 @@ namespace calculateTree.free
 
         public override string ToString()
         {
-            if (IsDirectGetAble)
+            if (IsKnown)
             {
                 return Convert.ToString(GetValue());
             }
@@ -265,7 +241,7 @@ namespace calculateTree.free
             {
                 if (IsValueSet)
                 {
-                    builder.AppendLine(string.Format(" {0} | {1} = {2} = {3}",value, name, calculateTree[ExecuteKey].ToString(),value));
+                    builder.AppendLine(string.Format(" {0} | {1} = {2} = {3}", value, name, calculateTree[ExecuteKey].ToString(), value));
                 }
                 else
                     throw new Exception("unexpected condition");

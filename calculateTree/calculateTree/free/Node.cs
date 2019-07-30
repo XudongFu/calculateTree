@@ -191,7 +191,7 @@ namespace calculateTree.free
 
         public dynamic InvokeMethod()
         {
-            if (self.IsDirectGetAble)
+            if (self.IsKnown)
             {
                 return self.GetValue();
             }

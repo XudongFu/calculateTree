@@ -82,7 +82,7 @@ namespace calculateTree.free
             steps.ForEach(p =>
             {
                 //对于已经修复过的节点不再进行处理
-                if (!this.knownVaribles.Contains(p.Item1) && !varibleDic[p.Item1].IsDirectGetAble)
+                if (!this.knownVaribles.Contains(p.Item1) && !varibleDic[p.Item1].IsKnown)
                 {
                     varibleDic[p.Item1].ExecuteKey = p.Item2;
                     varibleDic[p.Item1].RepireNode(h => varibleDic[h].GetExecute());
@@ -214,7 +214,7 @@ namespace calculateTree.free
                 }
                 else
                 {
-                    if (node.self.IsDirectGetAble || node.self.IsTemp)
+                    if (node.self.IsKnown || node.self.IsTemp)
                         builder.AppendLine(string.Format("{0}", node.InvokeMethod()));
                     else
                         builder.AppendLine(string.Format("{0}", GetVaribleDescription(node.self.name)));

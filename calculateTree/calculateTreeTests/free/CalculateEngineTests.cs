@@ -42,8 +42,23 @@ namespace calculateTree.free.Tests
         }
 
         [TestMethod()]
+        public void SetVariblesTest3()
+        {
+            int val = 0;
+            Func<dynamic> getVal = () => { return val++; };
+            CalculateEngine engine = new CalculateEngine();
+            engine.Parse("a+b=5");
+            engine.SetVaribles("a", getVal);
+            var res = engine.GetVarileValue("b");
+            Assert.AreNotEqual(res, 5);
+            res = engine.GetVarileValue("b");
+            Assert.AreNotEqual(res, 4);
+        }
+
+        [TestMethod()]
         public void SetContantVaribleTest()
         {
+            
         }
 
         [TestMethod()]
