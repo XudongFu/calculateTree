@@ -27,13 +27,58 @@ namespace calculateTree.free.method
 
         public int GetParamCount()
         {
-            return 1;
+            return 2;
         }
 
         public Node GetUnOpperationCalculateNode(int paramIndex)
         {
-            throw new NotImplementedException();
+            if (paramIndex < 0 || paramIndex >= GetParamCount())
+                throw new ArgumentException();
+            if (paramIndex == 0)
+            {
+                Node subNode = currentNode.GetNode(paramIndex);
+                List<Node> param = new List<Node>();
+                param.Add(currentNode.GetNode(1));
+                param.Add(GetReciprocal(currentNode.GetTopNode()));
+                Pow sub = new Pow();
+                Node res = new Node(subNode.self);
+                param.ForEach(p => p.SetParent(res));
+                res.SetParams(null, param, sub);
+                sub.currentNode = res;
+                return res;
+
+            }
+            else
+            {
+                Node subNode = currentNode.GetNode(paramIndex);
+                List<Node> param = new List<Node>();
+                param.Add(currentNode.GetNode(0));
+                param.Add(currentNode.GetTopNode());
+                Pow sub = new Pow();
+                Node res = new Node(subNode.self);
+                param.ForEach(p => p.SetParent(res));
+                res.SetParams(null, param, sub);
+                sub.currentNode = res;
+                return res;
+            }
         }
+
+
+        Node GetReciprocal(Node node)
+        {
+            Varible varible = new Varible("1", 1);
+            Node leftNode = new Node(varible);
+            Node topNode = new Node(new Varible());
+            List<Node> param = new List<Node>();
+            param.Add(leftNode);
+            param.Add(node);
+            ICalculateMethod method = new Divide();
+            topNode.SetParams(null, param, method);
+            param.ForEach(p => p.SetParent(topNode));
+            method.currentNode = topNode;
+            return topNode;
+        }
+
 
         public dynamic GetValue(params dynamic[] param)
         {

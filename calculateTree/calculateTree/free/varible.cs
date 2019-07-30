@@ -241,7 +241,7 @@ namespace calculateTree.free
             {
                 if (IsValueSet)
                 {
-                    builder.AppendLine(string.Format(" {0} | {1} = {2} = {3}", value, name, calculateTree[ExecuteKey].ToString(), value));
+                    builder.AppendLine(string.Format(" {0} | {1} = {2} = {3}", value, name, removeBracket(calculateTree[ExecuteKey].ToString()), value));
                 }
                 else
                     throw new Exception("unexpected condition");
@@ -250,10 +250,22 @@ namespace calculateTree.free
             {
                 foreach (var node in calculateTree.Values)
                 {
-                    builder.AppendLine(string.Format(" {0} = {1}", name, node.ToString()));
+                    builder.AppendLine(string.Format(" {0} = {1}", name, removeBracket( node.ToString())));
                 }
             }
             return builder.ToString();
+        }
+
+        private string removeBracket(string str)
+        {
+            if (str.Length > 2 && str[0] == '(' && str[str.Length - 1] == ')')
+            {
+                return str.Substring(1, str.Length - 2);
+            }
+            else
+            {
+                return str;
+            }
         }
 
 

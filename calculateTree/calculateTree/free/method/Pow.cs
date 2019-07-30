@@ -38,9 +38,9 @@ namespace calculateTree.free.method
             {
                 Node subNode = currentNode.GetNode(paramIndex);
                 List<Node> param = new List<Node>();
-                param.Add(currentNode.GetTopNode());
-                param.Add(GetReciprocal(currentNode.GetNode(1)));
-                Sub sub = new Sub();
+                param.Add(currentNode.GetNode(1));
+                param.Add(GetReciprocal(currentNode.GetTopNode()));
+                Pow sub = new Pow();
                 Node res = new Node(subNode.self);
                 param.ForEach(p => p.SetParent(res));
                 res.SetParams(null, param, sub);

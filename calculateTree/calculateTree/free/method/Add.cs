@@ -18,7 +18,17 @@ namespace calculateTree.free.method
 
         public string ConvertToString()
         {
-            return string.Format("({0}{1}{2})",currentNode.GetParamDescription(0),GetName(), currentNode.GetParamDescription(1));
+            string left = currentNode.GetParamDescription(0);
+            string right = currentNode.GetParamDescription(1);
+            if (left=="0")
+            {
+                return right;
+            }
+            if (right == "0")
+            {
+                return left;
+            }
+            return string.Format("({0}{1}{2})", left, GetName(), right);
         }
 
         public string GetName()
