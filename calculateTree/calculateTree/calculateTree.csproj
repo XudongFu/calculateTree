@@ -46,6 +46,10 @@
     <Compile Include="free\CannnotGetNodeFromParam.cs" />
     <Compile Include="free\CannotCalculate.cs" />
     <Compile Include="free\Engine.cs" />
+    <Compile Include="free\function\ConstructEngine.cs" />
+    <Compile Include="free\function\IMethodWithType.cs" />
+    <Compile Include="free\function\NodeWithType.cs" />
+    <Compile Include="free\function\VaribleWithType.cs" />
     <Compile Include="free\ICalculateMethod.cs" />
     <Compile Include="free\method\Abs.cs" />
     <Compile Include="free\method\ACos.cs" />
@@ -79,6 +83,8 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="free\function\TextFile1.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
