@@ -31,22 +31,22 @@ namespace calculateTree.free.function
         }
 
 
-        private NodeWithType ConstructWayFrom(VaribleWithType variA, VaribleWithType variB)
-        {
-
-        }
-
-
-        private NodeWithType ConstructWayFrom(string typeA,string  typeB)
-        {
-
-        }
+        //private NodeWithType ConstructWayFrom(VaribleWithType variA, VaribleWithType variB)
+        //{
+        //    return null;
+        //}
 
 
-        List<IMethodWithType> GetMethodChain(string typeA, string typeB)
-        {
+        //private NodeWithType ConstructWayFrom(string typeA,string  typeB)
+        //{
+        //    return null;
+        //}
 
-        }
+
+        //List<IMethodWithType> GetMethodChain(string typeA, string typeB)
+        //{
+
+        //}
 
 
 

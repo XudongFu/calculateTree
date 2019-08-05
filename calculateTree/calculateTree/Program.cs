@@ -13,6 +13,18 @@ namespace calculateTree
         {
             CalculateEngine engine = new CalculateEngine();
 
+            //DateTime time = DateTime.Now;
+            //long sum = 0;
+            //for (long i=0;i<10616832;i++)
+            //{
+            //    sum++;
+            //}
+
+            //DateTime endtime = DateTime.Now;
+            //var span = endtime - time;
+            //Double tt = span.TotalMilliseconds;
+            //Console.ReadLine();
+
             //string res = "";
             //string exp = "(23+34*45/(5+6+7))";
             //string exp3 = "1+2*pow(4,(6+7.65*var)*2)=6";

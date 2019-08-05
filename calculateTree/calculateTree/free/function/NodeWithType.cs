@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace calculateTree.free.function
 {
-    class NodeWithType:Node
-    {
-    }
+    //class NodeWithType:Node
+    //{
+    //}
 }

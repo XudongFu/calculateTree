@@ -8,7 +8,7 @@ namespace calculateTree.free.function
 {
     class VaribleWithType:Varible
     {
-        string Type { internal set; get; }
+       // string Type { internal set; get; }
 
 
 

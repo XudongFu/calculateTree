@@ -17,7 +17,7 @@ namespace calculateTree.free.method
             if (oppDic == null)
             {
                 oppDic = new Dictionary<string, Type>();
-                var types = typeof(CalculateFactory).Assembly.GetTypes().Where(p => p.GetInterface("ICalculateMethod") != null).ToList();
+                var types = typeof(CalculateFactory).Assembly.GetTypes().Where(p => p.GetInterface("ICalculateMethod") != null && p.IsClass).ToList();
                 types.ForEach(p =>
                 {
                     var temp = Activator.CreateInstance(p);

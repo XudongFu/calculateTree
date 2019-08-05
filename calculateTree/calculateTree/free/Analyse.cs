@@ -48,14 +48,18 @@ namespace calculateTree.free
             }
             terms.Reverse();
             int index = 0;
-            try
+#if DEBUG
+            return ReadOneNode(terms, null, ref index);
+#else
+              try
             {
-                return ReadOneNode(terms, null, ref index); ;
+                return ReadOneNode(terms, null, ref index);
             }
             catch (Exception e)
             {
                 throw new Exception("请检查输入的表达式");
             }
+#endif
         }
 
         private Node ReadOneNode(List<string> terms, Node parentNode, ref int index)
